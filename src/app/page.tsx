@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import Link from "next/link";
 
 export default function Page() {
   return (
@@ -25,7 +26,9 @@ export default function Page() {
             <div>Some image</div>
           </CardContent>
           <CardFooter>
-            <Button>Join pool</Button>
+            <Button asChild>
+              <Link href="/joinPublicPool">Join pool</Link>
+            </Button>
           </CardFooter>
         </Card>
 
@@ -40,7 +43,9 @@ export default function Page() {
             <div>Some image</div>
           </CardContent>
           <CardFooter>
-            <Button>Create pool</Button>
+            <Button asChild>
+              <Link href="/create-private-pool">Create pool</Link>
+            </Button>
           </CardFooter>
         </Card>
       </div>
