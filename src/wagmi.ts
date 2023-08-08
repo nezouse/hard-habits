@@ -1,20 +1,18 @@
-import { configureChains, createConfig } from 'wagmi'
-import { goerli, mainnet } from 'wagmi/chains'
-import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
-import { InjectedConnector } from 'wagmi/connectors/injected'
-import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
-import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
+import { configureChains, createConfig } from "wagmi";
+import { goerli, mainnet } from "wagmi/chains";
+import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet";
+import { InjectedConnector } from "wagmi/connectors/injected";
+import { MetaMaskConnector } from "wagmi/connectors/metaMask";
+import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 
-import { publicProvider } from 'wagmi/providers/public'
+import { publicProvider } from "wagmi/providers/public";
 
-const walletConnectProjectId = 'cec4e73ceb25170b43bd2dbf802a7f95'
+const walletConnectProjectId = "cec4e73ceb25170b43bd2dbf802a7f95";
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [mainnet, ...(process.env.NODE_ENV === 'development' ? [goerli] : [])],
-  [
-    publicProvider(),
-  ],
-)
+  [mainnet, ...(process.env.NODE_ENV === "development" ? [goerli] : [])],
+  [publicProvider()],
+);
 
 export const config = createConfig({
   autoConnect: true,
@@ -23,7 +21,7 @@ export const config = createConfig({
     new CoinbaseWalletConnector({
       chains,
       options: {
-        appName: 'wagmi',
+        appName: "wagmi",
       },
     }),
     new WalletConnectConnector({
@@ -35,11 +33,11 @@ export const config = createConfig({
     new InjectedConnector({
       chains,
       options: {
-        name: 'Injected',
+        name: "Injected",
         shimDisconnect: true,
       },
     }),
   ],
   publicClient,
   webSocketPublicClient,
-})
+});
