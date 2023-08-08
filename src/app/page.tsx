@@ -44,7 +44,7 @@ export default function Page() {
           </CardContent>
           <CardFooter>
             <Button asChild>
-              <Link href="/create-private-pool">Create pool</Link>
+              <Link href="/createPrivatePool">Create pool</Link>
             </Button>
           </CardFooter>
         </Card>
