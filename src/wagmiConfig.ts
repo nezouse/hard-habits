@@ -11,7 +11,7 @@ const walletConnectProjectId = "cec4e73ceb25170b43bd2dbf802a7f95";
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [mainnet, ...(process.env.NODE_ENV === "development" ? [goerli] : [])],
-  [publicProvider()],
+  [publicProvider()]
 );
 
 export const config = createConfig({
