@@ -1,4 +1,6 @@
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 import "./globals.css";
+import "@rainbow-me/rainbowkit/styles.css";
 
 import { Providers } from "./providers";
 
@@ -14,8 +16,20 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          <Nav />
+          {children}
+        </Providers>
       </body>
     </html>
+  );
+}
+
+function Nav() {
+  return (
+    <nav className="flex justify-between">
+      <div>Hard habits</div>
+      <ConnectButton />
+    </nav>
   );
 }
