@@ -24,7 +24,7 @@ export default function Page() {
         </CardContent>
         <CardFooter>
           <Button asChild>
-            <Link href="/joinPublicPool">Join pool</Link>
+            <Link href="/publicPool/create">Join pool</Link>
           </Button>
         </CardFooter>
       </Card>
@@ -41,7 +41,7 @@ export default function Page() {
         </CardContent>
         <CardFooter>
           <Button asChild>
-            <Link href="/createPrivatePool">Create pool</Link>
+            <Link href="/privatePool/create">Create pool</Link>
           </Button>
         </CardFooter>
       </Card>

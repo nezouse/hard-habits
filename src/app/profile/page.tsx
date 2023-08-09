@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -9,10 +10,11 @@ import {
 import { graphql } from "@/gql";
 import { gqlRequest } from "@/lib/gqlRequest";
 import { format } from "date-fns";
+import Link from "next/link";
 
 export default async function Page() {
   const data = await getData();
-  console.log(JSON.stringify(data, null, 2));
+
   return (
     <Table>
       <TableHeader>
@@ -21,6 +23,7 @@ export default async function Page() {
           <TableHead>Category</TableHead>
           <TableHead>Value</TableHead>
           <TableHead>End date</TableHead>
+          <TableHead>Actions</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -34,6 +37,11 @@ export default async function Page() {
                 new Date(Number.parseInt(data.endDate.hex, 16) * 1000),
                 "PPP"
               )}
+            </TableCell>
+            <TableCell>
+              <Button asChild>
+                <Link href="/publicPool/complete">Mark as completed</Link>
+              </Button>
             </TableCell>
           </TableRow>
         ))}
