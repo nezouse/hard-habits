@@ -1,9 +1,45 @@
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { graphql } from "@/gql";
 import { gqlRequest } from "@/lib/gqlRequest";
+import { format } from "date-fns";
 
 export default async function Page() {
   const data = await getData();
-  return <pre>{JSON.stringify(data, null, 2)}</pre>;
+  console.log(JSON.stringify(data, null, 2));
+  return (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>ID</TableHead>
+          <TableHead>Category</TableHead>
+          <TableHead>Value</TableHead>
+          <TableHead>End date</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {data.map((data) => (
+          <TableRow key={data.id}>
+            <TableCell>{data.id.substring(0, 6)}...</TableCell>
+            <TableCell>{data.category}</TableCell>
+            <TableCell>{Number.parseInt(data.value.hex, 16)}</TableCell>
+            <TableCell>
+              {format(
+                new Date(Number.parseInt(data.endDate.hex, 16) * 1000),
+                "PPP"
+              )}
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
 }
 
 const userAttestationsDocument = graphql(/* GraphQL */ `
@@ -28,6 +64,10 @@ async function getData() {
 
   return response.attestations.map(({ id, decodedDataJson }) => ({
     id,
-    data: JSON.parse(decodedDataJson),
+    ...JSON.parse(decodedDataJson)
+      .map(({ name, value }: { name: any; value: any }) => ({
+        [name]: value.value,
+      }))
+      .reduce((acc: any, curr: any) => ({ ...acc, ...curr }), {}),
   }));
 }
