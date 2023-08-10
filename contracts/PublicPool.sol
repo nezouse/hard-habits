@@ -39,12 +39,12 @@ contract PublicPool is ERC20 {
     }
 
     constructor(
-        IERC20 underlyingAsset,
-        IEAS eas
+        address underlyingAsset,
+        address eas
     ) ERC20("PublicHabitPool", "PHP") {
-        _asset = underlyingAsset;
-        _underlyingDecimals = ERC20(address(underlyingAsset)).decimals();
-        _eas = eas;
+        _asset = IERC20(underlyingAsset);
+        _underlyingDecimals = ERC20(underlyingAsset).decimals();
+        _eas = IEAS(eas);
     }
 
     function asset() external view returns (IERC20) {

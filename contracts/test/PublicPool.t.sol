@@ -36,7 +36,7 @@ contract PublicPoolTest is Test {
         eas = new EAS(registry);
 
         usdc = new USDC();
-        pool = new PublicPool(usdc, eas);
+        pool = new PublicPool(address(usdc), address(eas));
     }
 
     function testConstructor() public {
