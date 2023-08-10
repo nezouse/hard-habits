@@ -4,7 +4,8 @@ pragma solidity 0.8.19;
 import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {Math} from "@openzeppelin/contracts/utils/math/Math.sol";
-import {IEAS} from "eas-contracts/IEAS.sol";
+import {IEAS, AttestationRequest, AttestationRequestData} from "eas-contracts/IEAS.sol";
+import {NO_EXPIRATION_TIME, EMPTY_UID} from "eas-contracts/Common.sol";
 
 contract PublicPool is ERC20 {
     using Math for uint256;
@@ -14,10 +15,11 @@ contract PublicPool is ERC20 {
 
     IEAS private immutable _eas;
 
-    constructor(
-        IERC20 underlyingAsset,
-        IEAS eas
-    ) ERC20("PublicHabitPool", "PHP") {
+    bytes32 public constant DEPOSIT_SCHEMA_ID = keccak256(
+        abi.encodePacked("string category,uint256 stake,uinty256 shares,uint64 endDate,uint64 value", address(0), false)
+    );
+
+    constructor(IERC20 underlyingAsset, IEAS eas) ERC20("PublicHabitPool", "PHP") {
         _asset = underlyingAsset;
         _underlyingDecimals = ERC20(address(underlyingAsset)).decimals();
         _eas = eas;
@@ -35,10 +37,23 @@ contract PublicPool is ERC20 {
         return _asset.balanceOf(address(this));
     }
 
-    function deposit(uint256 assets) external {
+    function deposit(uint256 assets) external returns (bytes32) {
         uint256 shares = previewDeposit(assets);
         _asset.transferFrom(msg.sender, address(this), assets);
         _mint(msg.sender, shares);
+        return _eas.attest(
+            AttestationRequest({
+                schema: DEPOSIT_SCHEMA_ID,
+                data: AttestationRequestData({
+                    recipient: msg.sender,
+                    expirationTime: NO_EXPIRATION_TIME,
+                    revocable: false,
+                    refUID: EMPTY_UID,
+                    value: 0,
+                    data: abi.encode("Steps", assets, shares, 0, 0)
+                })
+            })
+        );
     }
 
     function redeem(uint256 shares) external {

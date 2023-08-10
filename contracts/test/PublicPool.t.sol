@@ -6,16 +6,25 @@ import "../PublicPool.sol";
 import "../USDC.sol";
 
 import {EAS} from "eas-contracts/EAS.sol";
+import {Attestation} from "eas-contracts/IEAS.sol";
 import {SchemaRegistry} from "eas-contracts/SchemaRegistry.sol";
+import {ISchemaResolver} from "eas-contracts/resolver/ISchemaResolver.sol";
 
 contract PublicPoolTest is Test {
     PublicPool public pool;
     USDC public usdc;
     SchemaRegistry public registry;
     EAS public eas;
+    bytes32 public schemaId;
 
     function setUp() public {
         registry = new SchemaRegistry();
+        schemaId = registry.register(
+            "string category,uint256 stake,uinty256 shares,uint64 endDate,uint64 value",
+            ISchemaResolver(address(0)),
+            false
+        );
+
         eas = new EAS(registry);
 
         usdc = new USDC();
@@ -110,5 +119,25 @@ contract PublicPoolTest is Test {
         assertEq(pool.totalSupply(), (amount * 3) / 2);
         assertEq(pool.balanceOf(address(this)), (amount * 3) / 2);
         assertEq(pool.totalAssets(), 3 * amount);
+    }
+
+    function testDepositCreatesAttestation() public {
+        usdc.mint(address(this), 1000000);
+        usdc.approve(address(pool), 1000000);
+        bytes32 id = pool.deposit(1000000);
+
+        Attestation memory attestation = eas.getAttestation(id);
+        assertEq(attestation.schema, schemaId);
+        assertEq(attestation.recipient, address(this));
+        assertEq(attestation.revocable, false);
+
+        (string memory category, uint256 stake, uint256 shares, uint64 endDate, uint64 value) =
+            abi.decode(attestation.data, (string, uint256, uint256, uint64, uint64));
+
+        assertEq(category, "Steps");
+        assertEq(stake, 1000000);
+        assertEq(shares, 1000000);
+        assertEq(endDate, 0);
+        assertEq(value, 0);
     }
 }
