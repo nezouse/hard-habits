@@ -18,7 +18,7 @@ contract PublicPool is ERC20 {
     bytes32 public constant DEPOSIT_SCHEMA_ID =
         keccak256(
             abi.encodePacked(
-                "string category,uint256 stake,uinty256 shares,uint64 endDate,uint64 value",
+                "string category,uint256 stake,uint256 shares,uint64 endDate,uint64 value",
                 address(0),
                 false
             )

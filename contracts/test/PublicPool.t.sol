@@ -22,7 +22,7 @@ contract PublicPoolTest is Test {
     function setUp() public {
         registry = new SchemaRegistry();
         registry.register(
-            "string category,uint256 stake,uinty256 shares,uint64 endDate,uint64 value",
+            "string category,uint256 stake,uint256 shares,uint64 endDate,uint64 value",
             ISchemaResolver(address(0)),
             false
         );

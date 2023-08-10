@@ -30,6 +30,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useAccount, useQueryClient, useWaitForTransaction } from "wagmi";
+import { WriteContractResult } from "wagmi/actions";
+import {
+  useErc20Allowance,
+  useErc20Approve,
+  usePublicPoolDeposit,
+} from "@/generated";
+import { addresses } from "@/config/addresses";
 
 const categories = [
   {
@@ -49,18 +57,56 @@ const formSchema = z.object({
 type formSchema = z.infer<typeof formSchema>;
 
 export default function Page() {
+  const { address: account } = useAccount();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
 
-  function onSubmit(values: formSchema) {
-    console.log(values);
-  }
+  const { data: allowance = 0n } = useErc20Allowance({
+    address: addresses.usdc[420],
+    args: [account!, addresses.publicPool[420]],
+  });
+
+  const { data: approveData, write: sendApprove } = useErc20Approve({
+    address: addresses.usdc[420],
+  });
+
+  const { data: depositData, write: sendDeposit } = usePublicPoolDeposit({
+    address: addresses.publicPool[420],
+  });
+
+  const depositAmount = BigInt(form.watch("value") || "0") * 10n ** 6n;
+
+  const txProps: TxButtonProps =
+    allowance < depositAmount
+      ? {
+          label: "Approve",
+          sendTx: form.handleSubmit(() =>
+            sendApprove({ args: [addresses.publicPool[420], depositAmount] })
+          ),
+          txData: approveData,
+        }
+      : {
+          label: "Deposit",
+          sendTx: form.handleSubmit(({ category, endDate, value }) =>
+            sendDeposit({
+              args: [
+                depositAmount,
+                {
+                  category,
+                  endDate: BigInt(endDate.getTime() / 1000),
+                  value: BigInt(value),
+                },
+              ],
+            })
+          ),
+          txData: depositData,
+        };
 
   return (
     <div className="max-w-5xl mx-auto">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={txProps.sendTx} className="space-y-8">
           <FormField
             control={form.control}
             name="category"
@@ -109,7 +155,7 @@ export default function Page() {
 
               <FormField
                 control={form.control}
-                name="amount"
+                name="value"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Stake</FormLabel>
@@ -176,9 +222,27 @@ export default function Page() {
             </>
           )}
 
-          <Button type="submit">Submit</Button>
+          <TxButton {...txProps}>Submit</TxButton>
         </form>
       </Form>
     </div>
   );
+}
+
+interface TxButtonProps {
+  label: string;
+  sendTx: () => void;
+  txData: WriteContractResult | undefined;
+}
+
+function TxButton(props: TxButtonProps) {
+  const queryClient = useQueryClient();
+  useWaitForTransaction({
+    hash: props.txData?.hash,
+    async onSuccess() {
+      await queryClient.invalidateQueries();
+    },
+  });
+
+  return <Button type="submit">{props.label}</Button>;
 }

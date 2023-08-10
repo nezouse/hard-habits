@@ -2850,10 +2850,12 @@ export type TimestampWhereUniqueInput = {
   id?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type UserAttestationsQueryQueryVariables = Exact<{ [key: string]: never; }>;
+export type UserAttestationsQueryQueryVariables = Exact<{
+  recipient?: InputMaybe<Scalars['String']['input']>;
+}>;
 
 
-export type UserAttestationsQueryQuery = { __typename?: 'Query', attestations: Array<{ __typename?: 'Attestation', id: string, decodedDataJson: string }> };
+export type UserAttestationsQueryQuery = { __typename?: 'Query', attestations: Array<{ __typename?: 'Attestation', id: string, revoked: boolean, decodedDataJson: string, data: string }> };
 
 export class TypedDocumentString<TResult, TVariables>
   extends String
@@ -2871,12 +2873,12 @@ export class TypedDocumentString<TResult, TVariables>
 }
 
 export const UserAttestationsQueryDocument = new TypedDocumentString(`
-    query userAttestationsQuery {
-  attestations(
-    where: {recipient: {equals: "0x7F6733Ce45570105b60B4c49C029f8d4acC2A751"}}
-  ) {
+    query userAttestationsQuery($recipient: String) {
+  attestations(where: {recipient: {equals: $recipient}}) {
     id
+    revoked
     decodedDataJson
+    data
   }
 }
     `) as unknown as TypedDocumentString<UserAttestationsQueryQuery, UserAttestationsQueryQueryVariables>;

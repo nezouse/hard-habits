@@ -12,8 +12,14 @@ import { gqlRequest } from "@/lib/gqlRequest";
 import { format } from "date-fns";
 import Link from "next/link";
 
-export default async function Page() {
-  const data = await getData();
+interface PageProps {
+  params: {
+    account: string;
+  };
+}
+
+export default async function Page({ params }: PageProps) {
+  const data = await getData(params.account);
 
   return (
     <Table>
@@ -51,23 +57,21 @@ export default async function Page() {
 }
 
 const userAttestationsDocument = graphql(/* GraphQL */ `
-  query userAttestationsQuery {
-    attestations(
-      where: {
-        recipient: { equals: "0x7F6733Ce45570105b60B4c49C029f8d4acC2A751" }
-      }
-    ) {
+  query userAttestationsQuery($recipient: String) {
+    attestations(where: { recipient: { equals: $recipient } }) {
       id
+      revoked
       decodedDataJson
+      data
     }
   }
 `);
 
-async function getData() {
+async function getData(recipient: string) {
   const response = await gqlRequest(
     "https://optimism-goerli-bedrock.easscan.org/graphql",
     userAttestationsDocument,
-    {}
+    { recipient }
   );
 
   return response.attestations.map(({ id, decodedDataJson }) => ({
