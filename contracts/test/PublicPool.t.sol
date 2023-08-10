@@ -5,13 +5,21 @@ import "forge-std/Test.sol";
 import "../PublicPool.sol";
 import "../USDC.sol";
 
+import {EAS} from "eas-contracts/EAS.sol";
+import {SchemaRegistry} from "eas-contracts/SchemaRegistry.sol";
+
 contract PublicPoolTest is Test {
     PublicPool public pool;
     USDC public usdc;
+    SchemaRegistry public registry;
+    EAS public eas;
 
     function setUp() public {
+        registry = new SchemaRegistry();
+        eas = new EAS(registry);
+
         usdc = new USDC();
-        pool = new PublicPool(usdc);
+        pool = new PublicPool(usdc, eas);
     }
 
     function testConstructor() public {

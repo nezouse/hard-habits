@@ -4,6 +4,7 @@ pragma solidity 0.8.19;
 import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {Math} from "@openzeppelin/contracts/utils/math/Math.sol";
+import {IEAS} from "eas-contracts/IEAS.sol";
 
 contract PublicPool is ERC20 {
     using Math for uint256;
@@ -11,9 +12,15 @@ contract PublicPool is ERC20 {
     IERC20 private immutable _asset;
     uint8 private immutable _underlyingDecimals;
 
-    constructor(IERC20 underlyingAsset) ERC20("PublicHabitPool", "PHP") {
+    IEAS private immutable _eas;
+
+    constructor(
+        IERC20 underlyingAsset,
+        IEAS eas
+    ) ERC20("PublicHabitPool", "PHP") {
         _asset = underlyingAsset;
         _underlyingDecimals = ERC20(address(underlyingAsset)).decimals();
+        _eas = eas;
     }
 
     function asset() external view returns (IERC20) {
