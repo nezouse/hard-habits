@@ -6,7 +6,7 @@ import { Providers } from "./providers";
 import Link from "next/link";
 
 export const metadata = {
-  title: "wagmi",
+  title: "Hard habits",
 };
 
 export default function RootLayout({
@@ -30,7 +30,7 @@ function Nav() {
   return (
     <nav className="flex justify-between mb-4">
       <div>
-        <Link href="/">Hard habits</Link>
+        <Link href="/">💪 Hard habits</Link>
       </div>
       <ConnectButton />
     </nav>
