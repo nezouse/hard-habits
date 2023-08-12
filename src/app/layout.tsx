@@ -16,7 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body className="p-4">
         <Providers>
           <Nav />
           {children}
@@ -28,7 +28,7 @@ export default function RootLayout({
 
 function Nav() {
   return (
-    <nav className="flex justify-between">
+    <nav className="flex justify-between mb-4">
       <div>
         <Link href="/">Hard habits</Link>
       </div>
