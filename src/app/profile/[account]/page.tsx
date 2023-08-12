@@ -46,7 +46,9 @@ export default async function Page({ params }: PageProps) {
             </TableCell>
             <TableCell>
               <Button asChild>
-                <Link href="/publicPool/complete">Mark as completed</Link>
+                <Link href={`/publicPool/complete/${data.id}`}>
+                  Mark as completed
+                </Link>
               </Button>
             </TableCell>
           </TableRow>

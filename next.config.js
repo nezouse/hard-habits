@@ -5,6 +5,13 @@ const nextConfig = {
     config.resolve.fallback = { fs: false, net: false, tls: false };
     return config;
   },
+  images: {
+    remotePatterns: [
+      {
+        'hostname': 'uploadthing.com'
+      }
+    ]
+  },
   experimental: {
     typedRoutes: true,
   },

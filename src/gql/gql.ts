@@ -15,12 +15,17 @@ import * as types from './graphql';
  */
 const documents = {
     "\n  query userAttestationsQuery($recipient: String) {\n    attestations(where: { recipient: { equals: $recipient } }) {\n      id\n      revoked\n      decodedDataJson\n      data\n    }\n  }\n": types.UserAttestationsQueryDocument,
+    "\n  query attestationQuery($id: String!) {\n    attestation(where: { id: $id }) {\n      id\n      revoked\n      decodedDataJson\n    }\n  }\n": types.AttestationQueryDocument,
 };
 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query userAttestationsQuery($recipient: String) {\n    attestations(where: { recipient: { equals: $recipient } }) {\n      id\n      revoked\n      decodedDataJson\n      data\n    }\n  }\n"): typeof import('./graphql').UserAttestationsQueryDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query attestationQuery($id: String!) {\n    attestation(where: { id: $id }) {\n      id\n      revoked\n      decodedDataJson\n    }\n  }\n"): typeof import('./graphql').AttestationQueryDocument;
 
 
 export function graphql(source: string) {

@@ -2857,6 +2857,13 @@ export type UserAttestationsQueryQueryVariables = Exact<{
 
 export type UserAttestationsQueryQuery = { __typename?: 'Query', attestations: Array<{ __typename?: 'Attestation', id: string, revoked: boolean, decodedDataJson: string, data: string }> };
 
+export type AttestationQueryQueryVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+
+export type AttestationQueryQuery = { __typename?: 'Query', attestation?: { __typename?: 'Attestation', id: string, revoked: boolean, decodedDataJson: string } | null };
+
 export class TypedDocumentString<TResult, TVariables>
   extends String
   implements DocumentTypeDecoration<TResult, TVariables>
@@ -2882,3 +2889,12 @@ export const UserAttestationsQueryDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<UserAttestationsQueryQuery, UserAttestationsQueryQueryVariables>;
+export const AttestationQueryDocument = new TypedDocumentString(`
+    query attestationQuery($id: String!) {
+  attestation(where: {id: $id}) {
+    id
+    revoked
+    decodedDataJson
+  }
+}
+    `) as unknown as TypedDocumentString<AttestationQueryQuery, AttestationQueryQueryVariables>;
