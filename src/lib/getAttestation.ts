@@ -14,7 +14,13 @@ const redeemSchema =
 
 export async function getAttestation(id: string) {
   const attestations = await getAllAttestations();
-  return attestations.find((attestation) => attestation.id === id);
+  const attestation = attestations.find((attestation) => attestation.id === id);
+
+  if (!attestation) {
+    throw new Error("Attestation not found");
+  }
+
+  return attestation;
 }
 
 export async function getUserAttestations(recipient: string) {
@@ -58,7 +64,7 @@ export async function getAllAttestations() {
   return mappedAttestations;
 }
 
-export function parseAttestation(attestation: AttestationFragmentFragment) {
+function parseAttestation(attestation: AttestationFragmentFragment) {
   return {
     id: attestation.id,
     recipient: attestation.recipient,
