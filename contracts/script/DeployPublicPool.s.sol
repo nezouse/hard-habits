@@ -5,6 +5,9 @@ import "forge-std/Script.sol";
 import {PublicPool} from "../PublicPool.sol";
 import {SchemaRegistry} from "eas-contracts/SchemaRegistry.sol";
 import {ISchemaResolver} from "eas-contracts/resolver/ISchemaResolver.sol";
+import "../USDC.sol";
+
+import {EAS} from "eas-contracts/EAS.sol";
 
 contract DeployPublicPool is Script {
     function setUp() public {}
@@ -12,16 +15,14 @@ contract DeployPublicPool is Script {
     function run() public {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         vm.startBroadcast(deployerPrivateKey);
+        SchemaRegistry registry = new SchemaRegistry();
 
+        EAS eas = new EAS(registry);
+
+        USDC usdc = new USDC();
         // Optimism goerli only for now
-        PublicPool pool = new PublicPool(
-            0x5f1C3c9D42F531975EdB397fD4a34754cc8D3b71,
-            0x4200000000000000000000000000000000000021
-        );
+        PublicPool pool = new PublicPool(address(usdc), address(eas));
 
-        SchemaRegistry registry = SchemaRegistry(
-            0x4200000000000000000000000000000000000020
-        );
         if (registry.getSchema(pool.DEPOSIT_SCHEMA_ID()).uid == bytes32(0)) {
             registry.register(
                 "string category,uint256 stake,uint256 shares,uint64 endDate,uint64 value",
