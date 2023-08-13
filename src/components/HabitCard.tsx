@@ -123,9 +123,10 @@ function FooterContent({ attestation }: FooterContentProps) {
 
 interface BurnButtonProps {
   attestationId: string;
+  variant?: "outline";
 }
 
-function BurnButton({ attestationId }: BurnButtonProps) {
+export function BurnButton({ attestationId, variant }: BurnButtonProps) {
   const { write, data, status } = usePublicPoolTaskFailed({
     address: addresses.publicPool[420],
   });
@@ -136,7 +137,13 @@ function BurnButton({ attestationId }: BurnButtonProps) {
         write({ args: [attestationId as `0x${string}`] });
       }}
     >
-      <TxButton sendTx={write} txData={data} status={status} label="Burn it" />
+      <TxButton
+        sendTx={write}
+        txData={data}
+        status={status}
+        label="Burn it"
+        variant={variant}
+      />
     </form>
   );
 }

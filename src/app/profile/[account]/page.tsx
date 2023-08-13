@@ -7,11 +7,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getUserAttestations } from "@/lib/getAttestation";
+import { Attestation, getUserAttestations } from "@/lib/getAttestation";
 import { format } from "date-fns";
 import Link from "next/link";
 import { BadgeCheckIcon, BadgeXIcon } from "lucide-react";
 import { AttestationLink } from "@/lib/getAttestationLink";
+import { BurnButton } from "@/components/HabitCard";
 
 export const dynamic = "force-dynamic";
 
@@ -37,7 +38,7 @@ export default async function Page({ params }: PageProps) {
 
   const moneyEarned = data.reduce((acc, attestation) => {
     if (attestation.status === "redeemed") {
-      return acc + Number.parseInt(attestation.data.stake.hex, 16);
+      return acc + Number.parseInt(attestation.valueRedeemed.hex, 16);
     }
     return acc;
   }, 0);
@@ -110,25 +111,7 @@ export default async function Page({ params }: PageProps) {
                 )}
               </TableCell>
               <TableCell>
-                {attestation.status === "inProgress" && (
-                  <Button asChild variant="outline">
-                    <Link href={`/publicPool/complete/${attestation.id}`}>
-                      Mark as completed
-                    </Link>
-                  </Button>
-                )}
-                {attestation.status === "redeemed" && (
-                  <div className="flex gap-1 h-9 items-center px-3">
-                    <BadgeCheckIcon className="h-5 w-5" />
-                    Completed
-                  </div>
-                )}
-                {attestation.status === "failed" && (
-                  <div className="flex gap-1 h-9 items-center px-3">
-                    <BadgeXIcon className="h-5 w-5" />
-                    Failed
-                  </div>
-                )}
+                <Actions attestation={attestation} />
               </TableCell>
             </TableRow>
           ))}
@@ -136,4 +119,41 @@ export default async function Page({ params }: PageProps) {
       </Table>
     </div>
   );
+}
+
+interface ActionsProps {
+  attestation: Attestation;
+}
+
+function Actions({ attestation }: ActionsProps) {
+  switch (attestation.status) {
+    case "inProgress": {
+      return new Date() >
+        new Date(Number.parseInt(attestation.data.endDate.hex, 16) * 1000) ? (
+        <BurnButton attestationId={attestation.id} variant="outline" />
+      ) : (
+        <Button asChild variant="outline">
+          <Link href={`/publicPool/complete/${attestation.id}`}>
+            Mark as completed
+          </Link>
+        </Button>
+      );
+    }
+    case "failed": {
+      return (
+        <div className="flex gap-1 h-9 items-center px-3">
+          <BadgeXIcon className="h-5 w-5" />
+          Failed
+        </div>
+      );
+    }
+    case "redeemed": {
+      return (
+        <div className="flex gap-1 h-9 items-center px-3">
+          <BadgeCheckIcon className="h-5 w-5" />
+          Completed
+        </div>
+      );
+    }
+  }
 }

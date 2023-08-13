@@ -9,9 +9,16 @@ export interface TxButtonProps {
   sendTx: () => void;
   txData: WriteContractResult | undefined;
   onSuccess?: () => void;
+  variant?: "default" | "secondary" | "outline";
 }
 
-export function TxButton({ txData, label, status, onSuccess }: TxButtonProps) {
+export function TxButton({
+  txData,
+  label,
+  status,
+  onSuccess,
+  variant,
+}: TxButtonProps) {
   const queryClient = useQueryClient();
   const { status: waitStatus } = useWaitForTransaction({
     hash: txData?.hash,
@@ -24,7 +31,7 @@ export function TxButton({ txData, label, status, onSuccess }: TxButtonProps) {
   const isLoading = status === "loading" || waitStatus === "loading";
 
   return (
-    <Button type="submit" disabled={isLoading}>
+    <Button type="submit" disabled={isLoading} variant={variant}>
       {isLoading && <Loader2Icon className="h-5 w-5 mr-2 animate-spin" />}
       {label}
     </Button>

@@ -13,7 +13,7 @@ const redeemSchema =
   "0x2a673dee79c08ec2cc6400c4a9b90afb40ea5cda866b10c496c51a00278ac194";
 
 const failedSchema =
-  "0x09e5603865e790a50bba8d3b0b3df0b3dbcc4a716857b23f4fa2342d488df4b1";
+  "0x188558989ff0328a0ce42c40af5c229eafeff9eb47360d9226c041dcfdc5f850";
 
 export async function getAttestation(id: string) {
   const attestations = await getAllAttestations();
@@ -70,11 +70,13 @@ export async function getAllAttestations() {
       : redeemAttestation
       ? "redeemed"
       : "inProgress";
+    console.log(redeemAttestation);
 
     return {
       ...depositAttestation,
       proofUrl: redeemAttestation?.data.proofUrl,
       status,
+      valueRedeemed: redeemAttestation?.data.valueRedeemed,
     } as const;
   });
 

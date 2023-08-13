@@ -106,7 +106,7 @@ export default function Page() {
                 depositAmount,
                 {
                   category,
-                  endDate: BigInt(endDate.getTime() / 1000),
+                  endDate: BigInt(Math.floor(endDate.getTime() / 1000)),
                   value: BigInt(steps),
                 },
               ],
@@ -119,7 +119,7 @@ export default function Page() {
         };
 
   return (
-    <div className="max-w-5xl mx-auto">
+    <div className="max-w-5xl mx-auto p-9">
       <Form {...form}>
         <form onSubmit={txProps.sendTx} className="space-y-8">
           <FormField
