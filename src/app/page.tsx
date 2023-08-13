@@ -67,7 +67,7 @@ export default function Page() {
   );
 }
 
-export const Header = () => {
+const Header = () => {
   return (
     <div className="mb-16">
       <div className="bg-blue-50">
