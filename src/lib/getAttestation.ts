@@ -70,7 +70,6 @@ export async function getAllAttestations() {
       : redeemAttestation
       ? "redeemed"
       : "inProgress";
-    console.log(redeemAttestation);
 
     return {
       ...depositAttestation,

@@ -50,7 +50,6 @@ export function RedeemForm({ attestation }: FormProps) {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(({ attestationId, imageUrl }) => {
-            console.log("submiteted");
             write({ args: [attestationId as `0x${string}`, imageUrl] });
           })}
         >
