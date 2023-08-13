@@ -14,6 +14,7 @@ import { Form } from "@/components/ui/form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import { AttestationLink } from "@/lib/getAttestationLink";
 
 const formSchema = z.object({
   attestationId: z.string(),
@@ -45,7 +46,7 @@ export function RedeemForm({ attestation }: FormProps) {
   });
 
   return (
-    <div>
+    <div className="p-9">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(({ attestationId, imageUrl }) => {
@@ -53,43 +54,57 @@ export function RedeemForm({ attestation }: FormProps) {
             write({ args: [attestationId as `0x${string}`, imageUrl] });
           })}
         >
-          <div>Mark as completed {attestation.id}</div>
-          <div>Category: {attestation.data.category}</div>
-          <div>Value: {parseInt(attestation.data.value.hex, 16)} steps</div>
-          <div>
-            Amount: ${parseInt(attestation.data.stake.hex, 16) / 10 ** 6}
-          </div>
-          <div>
-            You will get back $
-            {parseInt(previewData?.toString() ?? "0") / 10 ** 6}
-          </div>
+          <div className="flex gap-12 mx-auto justify-center flex-wrap">
+            <div className="flex flex-col gap-4">
+              <div>
+                <AttestationLink chainId={420} attestationId={attestation.id}>
+                  Mark as completed {attestation.id.substring(0, 6)}
+                </AttestationLink>
+              </div>
+              <div>
+                You were supposed to do{" "}
+                {parseInt(attestation.data.value.hex, 16)}{" "}
+                {attestation.data.category}
+              </div>
+              <div>
+                You staked {parseInt(attestation.data.stake.hex, 16) / 10 ** 6}$
+                for your success
+              </div>
+              <div>
+                You will get back $
+                {parseInt(previewData?.toString() ?? "0") / 10 ** 6}
+              </div>
+            </div>
 
-          <div className="flex flex-col items-center gap-4 w-fit border p-4 rounded-lg">
-            <Image
-              src={fileUrl ? fileUrl : PlaceholderImage}
-              width={200}
-              height={200}
-              alt=""
-            />
+            <div className="flex flex-col items-center gap-4 w-fit border p-4 rounded-lg">
+              <Image
+                src={fileUrl ? fileUrl : PlaceholderImage}
+                width={300}
+                height={200}
+                alt=""
+              />
 
-            <UploadButton
-              endpoint="imageUploader"
-              onClientUploadComplete={(res) => {
-                form.setValue("imageUrl", res?.[0].url || "", {
-                  shouldValidate: true,
-                });
+              <UploadButton
+                endpoint="imageUploader"
+                onClientUploadComplete={(res) => {
+                  form.setValue("imageUrl", res?.[0].url || "", {
+                    shouldValidate: true,
+                  });
+                }}
+              />
+            </div>
+          </div>
+          <div className="flex justify-center mt-12">
+            <TxButton
+              label="Reedem"
+              sendTx={write}
+              status={status}
+              txData={data}
+              onSuccess={() => {
+                router.push("/feed");
               }}
             />
           </div>
-          <TxButton
-            label="Reedem"
-            sendTx={write}
-            status={status}
-            txData={data}
-            onSuccess={() => {
-              router.push("/feed");
-            }}
-          />
         </form>
       </Form>
     </div>
