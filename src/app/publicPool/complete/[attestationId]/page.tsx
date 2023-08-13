@@ -1,5 +1,5 @@
 import { RedeemForm } from "./Form";
-import { getAttestation } from "./getAttestation";
+import { getAttestation } from "@/lib/getAttestation";
 
 interface PageProps {
   params: {

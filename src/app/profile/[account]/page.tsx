@@ -7,9 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { graphql } from "@/gql";
-import { gqlRequest } from "@/lib/gqlRequest";
-import { parseAttestation } from "@/lib/parseAttestation";
+import { getUserAttestations } from "@/lib/getAttestation";
 import { format } from "date-fns";
 import Link from "next/link";
 
@@ -20,7 +18,7 @@ interface PageProps {
 }
 
 export default async function Page({ params }: PageProps) {
-  const data = await getData(params.account);
+  const data = await getUserAttestations(params.account);
 
   return (
     <Table>
@@ -34,20 +32,24 @@ export default async function Page({ params }: PageProps) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data.map((data) => (
-          <TableRow key={data.id}>
-            <TableCell>{data.id.substring(0, 6)}...</TableCell>
-            <TableCell>{data.category}</TableCell>
-            <TableCell>{Number.parseInt(data.value.hex, 16)}</TableCell>
+        {data.map((attestation) => (
+          <TableRow key={attestation.id}>
+            <TableCell>{attestation.id.substring(0, 6)}...</TableCell>
+            <TableCell>{attestation.data.category}</TableCell>
+            <TableCell>
+              {Number.parseInt(attestation.data.value.hex, 16)}
+            </TableCell>
             <TableCell>
               {format(
-                new Date(Number.parseInt(data.endDate.hex, 16) * 1000),
+                new Date(
+                  Number.parseInt(attestation.data.endDate.hex, 16) * 1000
+                ),
                 "PPP"
               )}
             </TableCell>
             <TableCell>
               <Button asChild>
-                <Link href={`/publicPool/complete/${data.id}`}>
+                <Link href={`/publicPool/complete/${attestation.id}`}>
                   Mark as completed
                 </Link>
               </Button>
@@ -56,28 +58,5 @@ export default async function Page({ params }: PageProps) {
         ))}
       </TableBody>
     </Table>
-  );
-}
-
-const userAttestationsDocument = graphql(/* GraphQL */ `
-  query userAttestationsQuery($recipient: String) {
-    attestations(where: { recipient: { equals: $recipient } }) {
-      id
-      revoked
-      decodedDataJson
-      data
-    }
-  }
-`);
-
-async function getData(recipient: string) {
-  const response = await gqlRequest(
-    "https://optimism-goerli-bedrock.easscan.org/graphql",
-    userAttestationsDocument,
-    { recipient }
-  );
-
-  return response.attestations.map((attestation) =>
-    parseAttestation(attestation)
   );
 }

@@ -6,8 +6,7 @@ import { UploadButton } from "@/lib/uploadthing";
 import Image from "next/image";
 import PlaceholderImage from "@/images/placeholderImage.jpg";
 
-import type { Attestation } from "./getAttestation";
-import { parseAttestation } from "@/lib/parseAttestation";
+import { type Attestation, parseAttestation } from "@/lib/getAttestation";
 import { usePublicPoolRedeem } from "@/generated";
 import { addresses } from "@/config/addresses";
 import { TxButton } from "@/components/TxButton";
@@ -28,11 +27,10 @@ interface FormProps {
 }
 
 export function RedeemForm({ attestation }: FormProps) {
-  const { data, write, error } = usePublicPoolRedeem({
+  const { data, write } = usePublicPoolRedeem({
     address: addresses.publicPool[420],
   });
 
-  console.log(error, data);
   const form = useForm<formSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -42,10 +40,6 @@ export function RedeemForm({ attestation }: FormProps) {
   const fileUrl = form.watch("imageUrl");
 
   const attestationData = parseAttestation(attestation);
-
-  console.log(form.formState.errors);
-  console.log(form.watch());
-  console.log(form.formState.isValid);
 
   return (
     <div>
@@ -57,9 +51,11 @@ export function RedeemForm({ attestation }: FormProps) {
           })}
         >
           <div>Mark as completed {attestation.id}</div>
-          <div>Category: {attestationData.category}</div>
-          <div>Value: {parseInt(attestationData.value.hex, 16)}</div>
-          <div>Amount: {parseInt(attestationData.stake.hex, 16) / 10 ** 6}</div>
+          <div>Category: {attestationData.data.category}</div>
+          <div>Value: {parseInt(attestationData.data.value.hex, 16)}</div>
+          <div>
+            Amount: {parseInt(attestationData.data.stake.hex, 16) / 10 ** 6}
+          </div>
 
           <div className="flex flex-col items-center gap-4 w-fit border p-4 rounded-lg">
             <Image
