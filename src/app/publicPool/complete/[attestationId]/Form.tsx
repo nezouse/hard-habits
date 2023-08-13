@@ -7,7 +7,7 @@ import Image from "next/image";
 import PlaceholderImage from "@/images/placeholderImage.jpg";
 
 import type { Attestation } from "@/lib/getAttestation";
-import { usePublicPoolRedeem } from "@/generated";
+import { usePublicPoolRedeem, usePublicPoolPreviewRedeem } from "@/generated";
 import { addresses } from "@/config/addresses";
 import { TxButton } from "@/components/TxButton";
 import { useForm } from "react-hook-form";
@@ -39,6 +39,11 @@ export function RedeemForm({ attestation }: FormProps) {
   });
   const fileUrl = form.watch("imageUrl");
 
+  const { data: previewData } = usePublicPoolPreviewRedeem({
+    address: addresses.publicPool[420],
+    args: [attestation.data.stake.hex],
+  });
+
   return (
     <div>
       <Form {...form}>
@@ -50,9 +55,13 @@ export function RedeemForm({ attestation }: FormProps) {
         >
           <div>Mark as completed {attestation.id}</div>
           <div>Category: {attestation.data.category}</div>
-          <div>Value: {parseInt(attestation.data.value.hex, 16)}</div>
+          <div>Value: {parseInt(attestation.data.value.hex, 16)} steps</div>
           <div>
-            Amount: {parseInt(attestation.data.stake.hex, 16) / 10 ** 6}
+            Amount: ${parseInt(attestation.data.stake.hex, 16) / 10 ** 6}
+          </div>
+          <div>
+            You will get back $
+            {parseInt(previewData?.toString() ?? "0") / 10 ** 6}
           </div>
 
           <div className="flex flex-col items-center gap-4 w-fit border p-4 rounded-lg">

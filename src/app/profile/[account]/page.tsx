@@ -11,6 +11,7 @@ import { getUserAttestations } from "@/lib/getAttestation";
 import { format } from "date-fns";
 import Link from "next/link";
 import { CheckCircledIcon } from "@radix-ui/react-icons";
+import { AttestationLink } from "@/lib/getAttestationLink";
 
 interface PageProps {
   params: {
@@ -36,7 +37,11 @@ export default async function Page({ params }: PageProps) {
         <TableBody>
           {data.map((attestation) => (
             <TableRow key={attestation.id}>
-              <TableCell>{attestation.id.substring(0, 6)}...</TableCell>
+              <TableCell>
+                <AttestationLink chainId={420} attestationId={attestation.id}>
+                  {attestation.id.substring(0, 6)}...
+                </AttestationLink>
+              </TableCell>
               <TableCell className="capitalize">
                 {attestation.data.category}
               </TableCell>

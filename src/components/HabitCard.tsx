@@ -20,6 +20,8 @@ import Placeholder from "@/images/placeholderImage.jpg";
 import { TxButton } from "./TxButton";
 import { usePublicPoolTaskFailed } from "@/generated";
 import { addresses } from "@/config/addresses";
+import { AddressExplorerLink } from "@/lib/getEtherscanLink";
+import { AttestationLink } from "@/lib/getAttestationLink";
 
 interface HabitCardProps {
   attestation: Attestation;
@@ -29,11 +31,19 @@ export function HabitCard({ attestation }: HabitCardProps) {
   return (
     <Card className="w-fit">
       <CardHeader>
-        <CardTitle>{`I will do ${parseInt(
-          attestation.data.value.hex,
-          16
-        )} steps!`}</CardTitle>
-        <CardDescription>By {attestation.recipient}</CardDescription>
+        <CardTitle>
+          <AttestationLink
+            chainId={420}
+            attestationId={attestation.id}
+          >{`I will do ${parseInt(
+            attestation.data.value.hex,
+            16
+          )} steps!`}</AttestationLink>
+        </CardTitle>
+        <CardDescription>
+          By{" "}
+          <AddressExplorerLink chainId={420} address={attestation.recipient} />
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Image
