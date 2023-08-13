@@ -12,6 +12,9 @@ const depositSchema =
 const redeemSchema =
   "0x24c62c4ab41bc1c29b1140dfa6458a2b003f2e3c96987e4134e458aca1e28a45";
 
+const failedSchema =
+  "0x09e5603865e790a50bba8d3b0b3df0b3dbcc4a716857b23f4fa2342d488df4b1";
+
 export async function getAttestation(id: string) {
   const attestations = await getAllAttestations();
   const attestation = attestations.find((attestation) => attestation.id === id);
@@ -49,15 +52,29 @@ export async function getAllAttestations() {
     (attestation) => attestation.schema === redeemSchema
   );
 
+  const failedAttestations = allAttestations.filter(
+    (attestation) => attestation.schema === failedSchema
+  );
+
   const mappedAttestations = depositAttestations.map((depositAttestation) => {
     const redeemAttestation = redeemAttestations.find(
       (redeemAttestation) => redeemAttestation.refId === depositAttestation.id
     );
 
+    const failedAttestation = failedAttestations.find(
+      (failedAttestation) => failedAttestation.refId === depositAttestation.id
+    );
+
+    const status = failedAttestation
+      ? "failed"
+      : redeemAttestation
+      ? "redeemed"
+      : "inProgress";
+
     return {
       ...depositAttestation,
       proofUrl: redeemAttestation?.data.proofUrl,
-      status: redeemAttestation ? "redeemed" : "inProgress",
+      status,
     } as const;
   });
 
