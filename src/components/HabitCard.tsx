@@ -9,14 +9,13 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
-import { format } from "date-fns";
 import Image from "next/image";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { BadgeCheckIcon, BadgeXIcon } from "lucide-react";
 import { useAccount } from "wagmi";
 import { isAddressEqual } from "viem";
-import Placeholder from "@/images/placeholderImage.jpg";
+import Placeholder from "@/images/steps.png";
 import { TxButton } from "./TxButton";
 import { usePublicPoolTaskFailed } from "@/generated";
 import { addresses } from "@/config/addresses";
@@ -29,7 +28,7 @@ interface HabitCardProps {
 
 export function HabitCard({ attestation }: HabitCardProps) {
   return (
-    <Card className="w-fit flex flex-col justify-between">
+    <Card className="w-[320px] flex flex-col justify-between">
       <CardHeader>
         <CardTitle>
           <AttestationLink
@@ -81,12 +80,13 @@ function FooterContent({ attestation }: FooterContentProps) {
           ) : (
             <>
               <div className="mx-auto">
-                {`Must be finished by ${format(
-                  new Date(
-                    Number.parseInt(attestation.data.endDate.hex, 16) * 1000
-                  ),
-                  "PPP"
-                )}`}
+                {`Must be finished by ${new Date(
+                  Number.parseInt(attestation.data.endDate.hex, 16) * 1000
+                ).toLocaleDateString("en-US", {
+                  month: "long",
+                  day: "numeric",
+                })}
+                `}
               </div>
               {account &&
                 isAddressEqual(
