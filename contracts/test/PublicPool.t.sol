@@ -27,11 +27,15 @@ contract PublicPoolTest is Test {
             false
         );
         registry.register(
-            "string type, string proofUrl",
+            "string type,string proofUrl,uint256 valueRedeemed,uint64 redeemDate",
             ISchemaResolver(address(0)),
             false
         );
-        registry.register("string type", ISchemaResolver(address(0)), false);
+        registry.register(
+            "string type,uint64 burnDate",
+            ISchemaResolver(address(0)),
+            false
+        );
 
         eas = new EAS(registry);
 

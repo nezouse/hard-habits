@@ -26,11 +26,17 @@ contract PublicPool is ERC20 {
 
     bytes32 public constant REDEEM_SCHEMA_ID =
         keccak256(
-            abi.encodePacked("string type,string proofUrl", address(0), false)
+            abi.encodePacked(
+                "string type,string proofUrl,uint256 valueRedeemed,uint64 redeemDate",
+                address(0),
+                false
+            )
         );
 
     bytes32 public constant TASK_FAILED_SCHEMA_ID =
-        keccak256(abi.encodePacked("string type", address(0), false));
+        keccak256(
+            abi.encodePacked("string type,uint64 burnDate", address(0), false)
+        );
 
     struct DepositData {
         string category;
@@ -121,7 +127,12 @@ contract PublicPool is ERC20 {
                         revocable: false,
                         refUID: attestationId,
                         value: 0,
-                        data: abi.encode("Redeem", proofUrl)
+                        data: abi.encode(
+                            "Redeem",
+                            proofUrl,
+                            assets,
+                            block.timestamp
+                        )
                     })
                 })
             );
@@ -154,7 +165,7 @@ contract PublicPool is ERC20 {
                         revocable: false,
                         refUID: attestationId,
                         value: 0,
-                        data: abi.encode("TaskFailed")
+                        data: abi.encode("TaskFailed", block.timestamp)
                     })
                 })
             );
