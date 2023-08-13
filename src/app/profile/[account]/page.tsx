@@ -25,7 +25,7 @@ export default async function Page({ params }: PageProps) {
   const data = await getUserAttestations(params.account);
 
   return (
-    <div className="m-4">
+    <div className="my-4 mx-8">
       <Table>
         <TableHeader>
           <TableRow>

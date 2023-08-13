@@ -63,3 +63,7 @@
     @apply bg-background text-foreground;
   }
 }
+
+div[data-rk] {
+  @apply min-h-screen;
+}

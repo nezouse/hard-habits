@@ -22,9 +22,11 @@ export default function RootLayout({
     <html lang="en" className="scroll-smooth">
       <body className="min-h-screen">
         <Providers>
-          <Nav />
-          {children}
-          <Footer />
+          <div className="min-h-screen flex flex-col">
+            <Nav />
+            <div className="flex-grow">{children}</div>
+            <Footer />
+          </div>
         </Providers>
       </body>
     </html>
