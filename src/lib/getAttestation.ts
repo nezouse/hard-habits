@@ -57,7 +57,7 @@ export async function getAllAttestations() {
     return {
       ...depositAttestation,
       proofUrl: redeemAttestation?.data.proofUrl,
-      status: redeemAttestations ? "redeemed" : "inProgress",
+      status: redeemAttestation ? "redeemed" : "inProgress",
     } as const;
   });
 

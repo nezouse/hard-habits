@@ -35,6 +35,9 @@ function Nav() {
         <Button variant="link" asChild className="text-2xl">
           <Link href="/">💪 Hard habits</Link>
         </Button>
+        <Button variant="link" asChild>
+          <Link href="/feed">Feed</Link>
+        </Button>
 
         <ProfileLink />
       </div>

@@ -54,8 +54,8 @@ export default function Page() {
           />
         </CardContent>
         <CardFooter>
-          <Button asChild className="mx-auto w-40">
-            <Link href="/privatePool/create">Create pool</Link>
+          <Button className="mx-auto w-40" disabled>
+            Create pool
           </Button>
         </CardFooter>
       </Card>
