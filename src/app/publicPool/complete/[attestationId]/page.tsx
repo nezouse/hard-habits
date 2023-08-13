@@ -1,6 +1,8 @@
 import { RedeemForm } from "./Form";
 import { getAttestation } from "@/lib/getAttestation";
 
+export const dynamic = "force-dynamic";
+
 interface PageProps {
   params: {
     attestationId: string;

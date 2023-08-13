@@ -31,7 +31,8 @@ export default async function Page({ params }: PageProps) {
           <TableRow>
             <TableHead>ID</TableHead>
             <TableHead>Category</TableHead>
-            <TableHead>Value</TableHead>
+            <TableHead>Steps</TableHead>
+            <TableHead>Stake</TableHead>
             <TableHead>End date</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
@@ -51,6 +52,9 @@ export default async function Page({ params }: PageProps) {
                 {Number.parseInt(attestation.data.value.hex, 16)}
               </TableCell>
               <TableCell>
+                ${Number.parseInt(attestation.data.stake.hex, 16) / 10 ** 6}
+              </TableCell>
+              <TableCell>
                 {format(
                   new Date(
                     Number.parseInt(attestation.data.endDate.hex, 16) * 1000
@@ -60,7 +64,7 @@ export default async function Page({ params }: PageProps) {
               </TableCell>
               <TableCell>
                 {attestation.status === "inProgress" && (
-                  <Button asChild>
+                  <Button asChild variant="outline">
                     <Link href={`/publicPool/complete/${attestation.id}`}>
                       Mark as completed
                     </Link>

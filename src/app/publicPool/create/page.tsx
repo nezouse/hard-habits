@@ -49,7 +49,7 @@ const categories = [
 
 const formSchema = z.object({
   category: z.string(),
-  amount: z.coerce.number().min(1, { message: "Please do at least a step :)" }),
+  steps: z.coerce.number().min(1, { message: "Please do at least a step :)" }),
   endDate: z.date({
     required_error: "End date is required.",
   }),
@@ -100,14 +100,14 @@ export default function Page() {
       : {
           label: "Deposit",
           status: depositStatus,
-          sendTx: form.handleSubmit(({ category, endDate, value }) =>
+          sendTx: form.handleSubmit(({ category, endDate, steps }) =>
             sendDeposit({
               args: [
                 depositAmount,
                 {
                   category,
                   endDate: BigInt(endDate.getTime() / 1000),
-                  value: BigInt(value),
+                  value: BigInt(steps),
                 },
               ],
             })
@@ -153,7 +153,7 @@ export default function Page() {
             <>
               <FormField
                 control={form.control}
-                name="amount"
+                name="steps"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Steps amount</FormLabel>
