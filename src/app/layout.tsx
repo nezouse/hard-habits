@@ -19,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className="scroll-smooth">
       <body className="min-h-screen">
         <Providers>
           <Nav />
@@ -33,12 +33,12 @@ export default function RootLayout({
 
 function Nav() {
   return (
-    <nav className="flex justify-between mb-12 mx-6 mt-5">
+    <nav className="flex justify-between my-5 mx-6">
       <div>
-        <Button variant="link" asChild className="text-2xl text-yellow-950">
+        <Button variant="link" asChild className="text-2xl text-blue-950">
           <Link href="/">💪 Hard habits</Link>
         </Button>
-        <Button variant="link" asChild className="text-yellow-950">
+        <Button variant="link" asChild className="text-blue-950">
           <Link href="/feed">Feed</Link>
         </Button>
 

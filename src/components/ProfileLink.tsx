@@ -9,14 +9,14 @@ export function ProfileLink() {
 
   if (!address) {
     return (
-      <Button variant="link" disabled className="text-yellow-950">
+      <Button variant="link" disabled className="text-blue-950">
         Your profile
       </Button>
     );
   }
 
   return (
-    <Button variant="link" asChild className="text-yellow-950">
+    <Button variant="link" asChild className="text-blue-950">
       <Link href={`/profile/${address}`}>Your profile</Link>
     </Button>
   );
