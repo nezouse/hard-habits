@@ -10,7 +10,7 @@ const depositSchema =
   "0xc92e07a2a609e534e900bbfa91dc11dbf2ebcd370a3c9179b9af87a2927031ce";
 
 const redeemSchema =
-  "0x24c62c4ab41bc1c29b1140dfa6458a2b003f2e3c96987e4134e458aca1e28a45";
+  "0x2a673dee79c08ec2cc6400c4a9b90afb40ea5cda866b10c496c51a00278ac194";
 
 const failedSchema =
   "0x09e5603865e790a50bba8d3b0b3df0b3dbcc4a716857b23f4fa2342d488df4b1";
