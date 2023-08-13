@@ -88,16 +88,17 @@ function FooterContent({ attestation }: FooterContentProps) {
                   "PPP"
                 )}`}
               </div>
-              {isAddressEqual(
-                account!,
-                attestation.recipient as `0x${string}`
-              ) && (
-                <Button asChild className="mx-auto w-40">
-                  <Link href={`/publicPool/complete/${attestation.id}`}>
-                    Complete now
-                  </Link>
-                </Button>
-              )}
+              {account &&
+                isAddressEqual(
+                  account,
+                  attestation.recipient as `0x${string}`
+                ) && (
+                  <Button asChild className="mx-auto w-40">
+                    <Link href={`/publicPool/complete/${attestation.id}`}>
+                      Complete now
+                    </Link>
+                  </Button>
+                )}
             </>
           )}
         </>
