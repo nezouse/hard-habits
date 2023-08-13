@@ -26,7 +26,7 @@ contract PublicPool is ERC20 {
 
     bytes32 public constant REDEEM_SCHEMA_ID =
         keccak256(
-            abi.encodePacked("string type, string proofUrl", address(0), false)
+            abi.encodePacked("string type,string proofUrl", address(0), false)
         );
 
     bytes32 public constant TASK_FAILED_SCHEMA_ID =

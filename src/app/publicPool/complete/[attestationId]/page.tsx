@@ -1,4 +1,4 @@
-import { Form } from "./Form";
+import { RedeemForm } from "./Form";
 import { getAttestation } from "./getAttestation";
 
 interface PageProps {
@@ -9,5 +9,5 @@ interface PageProps {
 
 export default async function Page({ params }: PageProps) {
   const attestation = await getAttestation(params.attestationId);
-  return <Form attestation={attestation} />;
+  return <RedeemForm attestation={attestation} />;
 }

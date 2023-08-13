@@ -30,14 +30,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useAccount, useQueryClient, useWaitForTransaction } from "wagmi";
-import { WriteContractResult } from "wagmi/actions";
+import { useAccount } from "wagmi";
 import {
   useErc20Allowance,
   useErc20Approve,
   usePublicPoolDeposit,
 } from "@/generated";
 import { addresses } from "@/config/addresses";
+import { TxButton, TxButtonProps } from "@/components/TxButton";
 
 const categories = [
   {
@@ -58,7 +58,7 @@ type formSchema = z.infer<typeof formSchema>;
 
 export default function Page() {
   const { address: account } = useAccount();
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<formSchema>({
     resolver: zodResolver(formSchema),
   });
 
@@ -222,27 +222,9 @@ export default function Page() {
             </>
           )}
 
-          <TxButton {...txProps}>Submit</TxButton>
+          <TxButton {...txProps} />
         </form>
       </Form>
     </div>
   );
-}
-
-interface TxButtonProps {
-  label: string;
-  sendTx: () => void;
-  txData: WriteContractResult | undefined;
-}
-
-function TxButton(props: TxButtonProps) {
-  const queryClient = useQueryClient();
-  useWaitForTransaction({
-    hash: props.txData?.hash,
-    async onSuccess() {
-      await queryClient.invalidateQueries();
-    },
-  });
-
-  return <Button type="submit">{props.label}</Button>;
 }

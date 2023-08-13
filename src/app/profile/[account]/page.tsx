@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/table";
 import { graphql } from "@/gql";
 import { gqlRequest } from "@/lib/gqlRequest";
+import { parseAttestation } from "@/lib/parseAttestation";
 import { format } from "date-fns";
 import Link from "next/link";
 
@@ -76,12 +77,7 @@ async function getData(recipient: string) {
     { recipient }
   );
 
-  return response.attestations.map(({ id, decodedDataJson }) => ({
-    id,
-    ...JSON.parse(decodedDataJson)
-      .map(({ name, value }: { name: any; value: any }) => ({
-        [name]: value.value,
-      }))
-      .reduce((acc: any, curr: any) => ({ ...acc, ...curr }), {}),
-  }));
+  return response.attestations.map((attestation) =>
+    parseAttestation(attestation)
+  );
 }
