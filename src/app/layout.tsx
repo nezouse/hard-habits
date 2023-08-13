@@ -30,12 +30,12 @@ export default function RootLayout({
 
 function Nav() {
   return (
-    <nav className="flex justify-between mb-12">
+    <nav className="flex justify-between mb-12 ">
       <div>
-        <Button variant="link" asChild className="text-2xl">
+        <Button variant="link" asChild className="text-2xl text-yellow-950">
           <Link href="/">💪 Hard habits</Link>
         </Button>
-        <Button variant="link" asChild>
+        <Button variant="link" asChild className="text-yellow-950">
           <Link href="/feed">Feed</Link>
         </Button>
 
