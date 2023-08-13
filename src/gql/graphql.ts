@@ -2850,21 +2850,28 @@ export type TimestampWhereUniqueInput = {
   id?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type AttestationFragmentFragment = { __typename?: 'Attestation', id: string, decodedDataJson: string };
+export type AttestationFragmentFragment = { __typename?: 'Attestation', id: string, recipient: string, schemaId: string, refUID: string, decodedDataJson: string };
 
 export type AttestationQueryQueryVariables = Exact<{
   id: Scalars['String']['input'];
 }>;
 
 
-export type AttestationQueryQuery = { __typename?: 'Query', attestation?: { __typename?: 'Attestation', id: string, decodedDataJson: string } | null };
+export type AttestationQueryQuery = { __typename?: 'Query', attestation?: { __typename?: 'Attestation', id: string, recipient: string, schemaId: string, refUID: string, decodedDataJson: string } | null };
 
 export type UserAttestationsQueryQueryVariables = Exact<{
   recipient?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type UserAttestationsQueryQuery = { __typename?: 'Query', attestations: Array<{ __typename?: 'Attestation', id: string, decodedDataJson: string }> };
+export type UserAttestationsQueryQuery = { __typename?: 'Query', attestations: Array<{ __typename?: 'Attestation', id: string, recipient: string, schemaId: string, refUID: string, decodedDataJson: string }> };
+
+export type AllAttestationsQueryQueryVariables = Exact<{
+  attester?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type AllAttestationsQueryQuery = { __typename?: 'Query', attestations: Array<{ __typename?: 'Attestation', id: string, recipient: string, schemaId: string, refUID: string, decodedDataJson: string }> };
 
 export class TypedDocumentString<TResult, TVariables>
   extends String
@@ -2883,6 +2890,9 @@ export class TypedDocumentString<TResult, TVariables>
 export const AttestationFragmentFragmentDoc = new TypedDocumentString(`
     fragment AttestationFragment on Attestation {
   id
+  recipient
+  schemaId
+  refUID
   decodedDataJson
 }
     `, {"fragmentName":"AttestationFragment"}) as unknown as TypedDocumentString<AttestationFragmentFragment, unknown>;
@@ -2894,6 +2904,9 @@ export const AttestationQueryDocument = new TypedDocumentString(`
 }
     fragment AttestationFragment on Attestation {
   id
+  recipient
+  schemaId
+  refUID
   decodedDataJson
 }`) as unknown as TypedDocumentString<AttestationQueryQuery, AttestationQueryQueryVariables>;
 export const UserAttestationsQueryDocument = new TypedDocumentString(`
@@ -2904,5 +2917,21 @@ export const UserAttestationsQueryDocument = new TypedDocumentString(`
 }
     fragment AttestationFragment on Attestation {
   id
+  recipient
+  schemaId
+  refUID
   decodedDataJson
 }`) as unknown as TypedDocumentString<UserAttestationsQueryQuery, UserAttestationsQueryQueryVariables>;
+export const AllAttestationsQueryDocument = new TypedDocumentString(`
+    query allAttestationsQuery($attester: String) {
+  attestations(where: {attester: {equals: $attester}}) {
+    ...AttestationFragment
+  }
+}
+    fragment AttestationFragment on Attestation {
+  id
+  recipient
+  schemaId
+  refUID
+  decodedDataJson
+}`) as unknown as TypedDocumentString<AllAttestationsQueryQuery, AllAttestationsQueryQueryVariables>;

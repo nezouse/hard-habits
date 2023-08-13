@@ -14,15 +14,16 @@ import * as types from './graphql';
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-    "\n  fragment AttestationFragment on Attestation {\n    id\n    decodedDataJson\n  }\n": types.AttestationFragmentFragmentDoc,
+    "\n  fragment AttestationFragment on Attestation {\n    id\n    recipient\n    schemaId\n    refUID\n    decodedDataJson\n  }\n": types.AttestationFragmentFragmentDoc,
     "\n  query attestationQuery($id: String!) {\n    attestation(where: { id: $id }) {\n      ...AttestationFragment\n    }\n  }\n": types.AttestationQueryDocument,
     "\n  query userAttestationsQuery($recipient: String) {\n    attestations(where: { recipient: { equals: $recipient } }) {\n      ...AttestationFragment\n    }\n  }\n": types.UserAttestationsQueryDocument,
+    "\n  query allAttestationsQuery($attester: String) {\n    attestations(where: { attester: { equals: $attester } }) {\n      ...AttestationFragment\n    }\n  }\n": types.AllAttestationsQueryDocument,
 };
 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  fragment AttestationFragment on Attestation {\n    id\n    decodedDataJson\n  }\n"): typeof import('./graphql').AttestationFragmentFragmentDoc;
+export function graphql(source: "\n  fragment AttestationFragment on Attestation {\n    id\n    recipient\n    schemaId\n    refUID\n    decodedDataJson\n  }\n"): typeof import('./graphql').AttestationFragmentFragmentDoc;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -31,6 +32,10 @@ export function graphql(source: "\n  query attestationQuery($id: String!) {\n   
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query userAttestationsQuery($recipient: String) {\n    attestations(where: { recipient: { equals: $recipient } }) {\n      ...AttestationFragment\n    }\n  }\n"): typeof import('./graphql').UserAttestationsQueryDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query allAttestationsQuery($attester: String) {\n    attestations(where: { attester: { equals: $attester } }) {\n      ...AttestationFragment\n    }\n  }\n"): typeof import('./graphql').AllAttestationsQueryDocument;
 
 
 export function graphql(source: string) {
