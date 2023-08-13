@@ -13,7 +13,7 @@ import { format } from "date-fns";
 import Image from "next/image";
 import { Button } from "./ui/button";
 import Link from "next/link";
-import { CheckCircledIcon, CrossCircledIcon } from "@radix-ui/react-icons";
+import { BadgeCheckIcon, BadgeXIcon } from "lucide-react";
 import { useAccount } from "wagmi";
 import { isAddressEqual } from "viem";
 import Placeholder from "@/images/placeholderImage.jpg";
@@ -106,14 +106,14 @@ function FooterContent({ attestation }: FooterContentProps) {
     case "redeemed": {
       return (
         <div className="flex items-center gap-1">
-          <CheckCircledIcon className="h-5 w-5" /> Task sucessfully finished
+          <BadgeCheckIcon className="h-5 w-5" /> Task sucessfully finished
         </div>
       );
     }
     case "failed": {
       return (
         <div className="flex items-center gap-1">
-          <CrossCircledIcon className="h-5 w-5" /> Task failed
+          <BadgeXIcon className="h-5 w-5" /> Task failed
         </div>
       );
     }

@@ -10,7 +10,7 @@ import {
 import { getUserAttestations } from "@/lib/getAttestation";
 import { format } from "date-fns";
 import Link from "next/link";
-import { CheckCircledIcon } from "@radix-ui/react-icons";
+import { BadgeCheckIcon } from "lucide-react";
 import { AttestationLink } from "@/lib/getAttestationLink";
 
 interface PageProps {
@@ -66,7 +66,7 @@ export default async function Page({ params }: PageProps) {
                 )}
                 {attestation.status === "redeemed" && (
                   <div className="flex gap-1 h-9 items-center px-3">
-                    <CheckCircledIcon className="h-5 w-5" />
+                    <BadgeCheckIcon className="h-5 w-5" />
                     Completed
                   </div>
                 )}
