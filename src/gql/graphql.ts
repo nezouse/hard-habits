@@ -2852,20 +2852,6 @@ export type TimestampWhereUniqueInput = {
 
 export type AttestationFragmentFragment = { __typename?: 'Attestation', id: string, recipient: string, schemaId: string, refUID: string, decodedDataJson: string };
 
-export type AttestationQueryQueryVariables = Exact<{
-  id: Scalars['String']['input'];
-}>;
-
-
-export type AttestationQueryQuery = { __typename?: 'Query', attestation?: { __typename?: 'Attestation', id: string, recipient: string, schemaId: string, refUID: string, decodedDataJson: string } | null };
-
-export type UserAttestationsQueryQueryVariables = Exact<{
-  recipient?: InputMaybe<Scalars['String']['input']>;
-}>;
-
-
-export type UserAttestationsQueryQuery = { __typename?: 'Query', attestations: Array<{ __typename?: 'Attestation', id: string, recipient: string, schemaId: string, refUID: string, decodedDataJson: string }> };
-
 export type AllAttestationsQueryQueryVariables = Exact<{
   attester?: InputMaybe<Scalars['String']['input']>;
 }>;
@@ -2896,35 +2882,12 @@ export const AttestationFragmentFragmentDoc = new TypedDocumentString(`
   decodedDataJson
 }
     `, {"fragmentName":"AttestationFragment"}) as unknown as TypedDocumentString<AttestationFragmentFragment, unknown>;
-export const AttestationQueryDocument = new TypedDocumentString(`
-    query attestationQuery($id: String!) {
-  attestation(where: {id: $id}) {
-    ...AttestationFragment
-  }
-}
-    fragment AttestationFragment on Attestation {
-  id
-  recipient
-  schemaId
-  refUID
-  decodedDataJson
-}`) as unknown as TypedDocumentString<AttestationQueryQuery, AttestationQueryQueryVariables>;
-export const UserAttestationsQueryDocument = new TypedDocumentString(`
-    query userAttestationsQuery($recipient: String) {
-  attestations(where: {recipient: {equals: $recipient}}) {
-    ...AttestationFragment
-  }
-}
-    fragment AttestationFragment on Attestation {
-  id
-  recipient
-  schemaId
-  refUID
-  decodedDataJson
-}`) as unknown as TypedDocumentString<UserAttestationsQueryQuery, UserAttestationsQueryQueryVariables>;
 export const AllAttestationsQueryDocument = new TypedDocumentString(`
     query allAttestationsQuery($attester: String) {
-  attestations(where: {attester: {equals: $attester}}) {
+  attestations(
+    where: {attester: {equals: $attester}}
+    orderBy: {timeCreated: desc}
+  ) {
     ...AttestationFragment
   }
 }

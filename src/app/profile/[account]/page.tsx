@@ -10,8 +10,10 @@ import {
 import { getUserAttestations } from "@/lib/getAttestation";
 import { format } from "date-fns";
 import Link from "next/link";
-import { BadgeCheckIcon } from "lucide-react";
+import { BadgeCheckIcon, BadgeXIcon } from "lucide-react";
 import { AttestationLink } from "@/lib/getAttestationLink";
+
+export const dynamic = "force-dynamic";
 
 interface PageProps {
   params: {
@@ -68,6 +70,12 @@ export default async function Page({ params }: PageProps) {
                   <div className="flex gap-1 h-9 items-center px-3">
                     <BadgeCheckIcon className="h-5 w-5" />
                     Completed
+                  </div>
+                )}
+                {attestation.status === "failed" && (
+                  <div className="flex gap-1 h-9 items-center px-3">
+                    <BadgeXIcon className="h-5 w-5" />
+                    Failed
                   </div>
                 )}
               </TableCell>

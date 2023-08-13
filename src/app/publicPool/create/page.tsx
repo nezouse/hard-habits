@@ -38,6 +38,7 @@ import {
 } from "@/generated";
 import { addresses } from "@/config/addresses";
 import { TxButton, TxButtonProps } from "@/components/TxButton";
+import { useRouter } from "next/navigation";
 
 const categories = [
   {
@@ -61,26 +62,36 @@ export default function Page() {
   const form = useForm<formSchema>({
     resolver: zodResolver(formSchema),
   });
+  const router = useRouter();
 
   const { data: allowance = 0n } = useErc20Allowance({
     address: addresses.usdc[420],
     args: [account!, addresses.publicPool[420]],
   });
 
-  const { data: approveData, write: sendApprove } = useErc20Approve({
+  const {
+    data: approveData,
+    write: sendApprove,
+    status: approveStatus,
+  } = useErc20Approve({
     address: addresses.usdc[420],
   });
 
-  const { data: depositData, write: sendDeposit } = usePublicPoolDeposit({
+  const {
+    data: depositData,
+    write: sendDeposit,
+    status: depositStatus,
+  } = usePublicPoolDeposit({
     address: addresses.publicPool[420],
   });
 
   const depositAmount = BigInt(form.watch("value") || "0") * 10n ** 6n;
 
   const txProps: TxButtonProps =
-    allowance < depositAmount
+    allowance < depositAmount || allowance === 0n
       ? {
           label: "Approve",
+          status: approveStatus,
           sendTx: form.handleSubmit(() =>
             sendApprove({ args: [addresses.publicPool[420], depositAmount] })
           ),
@@ -88,6 +99,7 @@ export default function Page() {
         }
       : {
           label: "Deposit",
+          status: depositStatus,
           sendTx: form.handleSubmit(({ category, endDate, value }) =>
             sendDeposit({
               args: [
@@ -101,6 +113,9 @@ export default function Page() {
             })
           ),
           txData: depositData,
+          onSuccess() {
+            router.push("/feed");
+          },
         };
 
   return (

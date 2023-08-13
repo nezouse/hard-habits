@@ -15,6 +15,7 @@ import { Form } from "@/components/ui/form";
 
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   attestationId: z.string(),
@@ -27,9 +28,10 @@ interface FormProps {
 }
 
 export function RedeemForm({ attestation }: FormProps) {
-  const { data, write } = usePublicPoolRedeem({
+  const { data, write, status } = usePublicPoolRedeem({
     address: addresses.publicPool[420],
   });
+  const router = useRouter();
 
   const form = useForm<formSchema>({
     resolver: zodResolver(formSchema),
@@ -81,7 +83,15 @@ export function RedeemForm({ attestation }: FormProps) {
               }}
             />
           </div>
-          <TxButton label="Reedem" sendTx={write} txData={data} />
+          <TxButton
+            label="Reedem"
+            sendTx={write}
+            status={status}
+            txData={data}
+            onSuccess={() => {
+              router.push("/feed");
+            }}
+          />
         </form>
       </Form>
     </div>

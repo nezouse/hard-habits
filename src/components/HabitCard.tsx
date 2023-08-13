@@ -29,7 +29,7 @@ interface HabitCardProps {
 
 export function HabitCard({ attestation }: HabitCardProps) {
   return (
-    <Card className="w-fit">
+    <Card className="w-fit flex flex-col justify-between">
       <CardHeader>
         <CardTitle>
           <AttestationLink
@@ -125,7 +125,7 @@ interface BurnButtonProps {
 }
 
 function BurnButton({ attestationId }: BurnButtonProps) {
-  const { write, data } = usePublicPoolTaskFailed({
+  const { write, data, status } = usePublicPoolTaskFailed({
     address: addresses.publicPool[420],
   });
   return (
@@ -135,7 +135,7 @@ function BurnButton({ attestationId }: BurnButtonProps) {
         write({ args: [attestationId as `0x${string}`] });
       }}
     >
-      <TxButton sendTx={write} txData={data} label="Burn it" />
+      <TxButton sendTx={write} txData={data} status={status} label="Burn it" />
     </form>
   );
 }

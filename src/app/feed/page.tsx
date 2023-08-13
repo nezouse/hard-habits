@@ -1,6 +1,8 @@
 import { HabitCard } from "@/components/HabitCard";
 import { getAllAttestations } from "@/lib/getAttestation";
 
+export const dynamic = "force-dynamic";
+
 export default async function Page() {
   const attestations = await getAllAttestations();
   return (

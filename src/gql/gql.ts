@@ -15,9 +15,7 @@ import * as types from './graphql';
  */
 const documents = {
     "\n  fragment AttestationFragment on Attestation {\n    id\n    recipient\n    schemaId\n    refUID\n    decodedDataJson\n  }\n": types.AttestationFragmentFragmentDoc,
-    "\n  query attestationQuery($id: String!) {\n    attestation(where: { id: $id }) {\n      ...AttestationFragment\n    }\n  }\n": types.AttestationQueryDocument,
-    "\n  query userAttestationsQuery($recipient: String) {\n    attestations(where: { recipient: { equals: $recipient } }) {\n      ...AttestationFragment\n    }\n  }\n": types.UserAttestationsQueryDocument,
-    "\n  query allAttestationsQuery($attester: String) {\n    attestations(where: { attester: { equals: $attester } }) {\n      ...AttestationFragment\n    }\n  }\n": types.AllAttestationsQueryDocument,
+    "\n  query allAttestationsQuery($attester: String) {\n    attestations(\n      where: { attester: { equals: $attester } }\n      orderBy: { timeCreated: desc }\n    ) {\n      ...AttestationFragment\n    }\n  }\n": types.AllAttestationsQueryDocument,
 };
 
 /**
@@ -27,15 +25,7 @@ export function graphql(source: "\n  fragment AttestationFragment on Attestation
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query attestationQuery($id: String!) {\n    attestation(where: { id: $id }) {\n      ...AttestationFragment\n    }\n  }\n"): typeof import('./graphql').AttestationQueryDocument;
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n  query userAttestationsQuery($recipient: String) {\n    attestations(where: { recipient: { equals: $recipient } }) {\n      ...AttestationFragment\n    }\n  }\n"): typeof import('./graphql').UserAttestationsQueryDocument;
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n  query allAttestationsQuery($attester: String) {\n    attestations(where: { attester: { equals: $attester } }) {\n      ...AttestationFragment\n    }\n  }\n"): typeof import('./graphql').AllAttestationsQueryDocument;
+export function graphql(source: "\n  query allAttestationsQuery($attester: String) {\n    attestations(\n      where: { attester: { equals: $attester } }\n      orderBy: { timeCreated: desc }\n    ) {\n      ...AttestationFragment\n    }\n  }\n"): typeof import('./graphql').AllAttestationsQueryDocument;
 
 
 export function graphql(source: string) {

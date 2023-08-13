@@ -107,25 +107,12 @@ export const attestationFragment = graphql(/* GraphQL */ `
   }
 `);
 
-const attestationDocument = graphql(/* GraphQL */ `
-  query attestationQuery($id: String!) {
-    attestation(where: { id: $id }) {
-      ...AttestationFragment
-    }
-  }
-`);
-
-const userAttestationsDocument = graphql(/* GraphQL */ `
-  query userAttestationsQuery($recipient: String) {
-    attestations(where: { recipient: { equals: $recipient } }) {
-      ...AttestationFragment
-    }
-  }
-`);
-
 const allAttestationsDocument = graphql(/* GraphQL */ `
   query allAttestationsQuery($attester: String) {
-    attestations(where: { attester: { equals: $attester } }) {
+    attestations(
+      where: { attester: { equals: $attester } }
+      orderBy: { timeCreated: desc }
+    ) {
       ...AttestationFragment
     }
   }
