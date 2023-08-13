@@ -1,7 +1,5 @@
 "use client";
 
-import "@uploadthing/react/styles.css";
-
 import { UploadButton } from "@/lib/uploadthing";
 import Image from "next/image";
 import PlaceholderImage from "@/images/placeholderImage.jpg";

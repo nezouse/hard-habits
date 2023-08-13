@@ -1,4 +1,5 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import "@uploadthing/react/styles.css";
 import "./globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 
